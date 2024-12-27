@@ -79,4 +79,10 @@ What is PPO (quickly)?
 
 Generation of the sample output from the optimized model to demonstrate its capabilities
 
+PPO FAQ Training :
+
+Mean Reward: The primary goal is to maximize the reward achieved by the model during RL training. Objective KL Divergence: KL divergence 
+(Kullback-Leibler divergence) measures the dissimilarity between two probability distributions. In the context of RL training, we use it 
+to quantify the difference between the current model and a reference model. Ideally, we want to keep the KL divergence between 0 and 10 to 
+ensure the model’s generated text remains close to what the reference model produces.
 
