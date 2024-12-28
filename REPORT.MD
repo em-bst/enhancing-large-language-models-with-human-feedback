@@ -26,19 +26,25 @@ $$
 $$
 
 where
+
 $$
 \mathbf{X} = \{x_1, x_2, \dots, x_n\}
 $$
+
 is the input sequence, and
+
 $$
 \mathbf{Z} = \{z_1, z_2, \dots, z_n\}
 $$
+
 is the sequence of encoded representations.
 
 The decoder generates the output sequence
+
 $$
 \mathbf{y} = \{y_1, y_2, \dots, y_m\}
 $$
+
 autoregressively:
 
 $$
@@ -46,17 +52,17 @@ $$
 $$
 
 where
+
 $$
 \mathbf{y}_{<t}
 $$
-represents all tokens generated prior to
-$$
-t
-$$
-and
+
+represents all tokens generated prior to t and
+
 $$
 \mathbf{Z}
 $$
+
 provides context from the encoder.
 
 
