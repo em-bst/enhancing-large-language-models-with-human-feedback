@@ -59,39 +59,104 @@ $$
 
 represents all tokens generated prior to t. 
 
-*What happens in the Encoder?*
+#### *What happens in the Encoder?*
 
 The encoder consists of N identical layers, each comprising three main components: a self-attention mechanism, a feed-forward neural network (FFN), and layer normalization with residual connections. Together, these components process the input sequence to produce a set of contextualized representations as follows : 
 
-![Sub_layers of one encoder](encoder_general.png)
+![Sub-layers of one encoder](encoder_general.png)
 
 Let us now go into more details and investigate what happens in each one of the layers.
 
 
-**Self attention and multihead-attention**
+** (b) Self attention and multihead-attention**
 
-embedding / preprocessing
+The self-attention mechanism is the core operation of the encoder. It allows each token in the sequence to attend to every other token of the sequence, producing a weighted sum of the sequence's representations. 
+The operation is crucial since it is the only one in the architecture that allows to learn information between vectors (ie. words).
 
-**Positional Encoding** 
+The input sequence X made of embedded / preprocessed vectors goes in and a sequence of vectors goes out. 
+
+How is this sequence Z computed ? 
+
+Well, each input vector \( \mathbf{x}_i \) serves three distinct roles:
+
+1. It is compared to all other vectors to determine the weights for its own output \( \mathbf{z}_i \).
+2. It is compared to all other vectors to determine the weights for the output of another vector \( \mathbf{z}_j \).
+3. It contributes to the weighted sum that calculates each output vector after the weights have been established.
+
+These three roles are referred to as the **query**, the **key**, and the **value**. 
+In the standard self-attention setup, each input vector is required to complete all three roles at the same time. 
+
+To do so, first, from each input vector are created three vectors (Query, Key, Value). These vectors are computed by multiplying the embedded vectors by three matrices trained and defined as : 
+
+\( k \times k \) weight matrices: \( \mathbf{W}_Q \), \( \mathbf{W}_K \), and \( \mathbf{W}_V \)
+$$
+\mathbf{Q}_i = \mathbf{W}_Q \mathbf{X}_i
+$$
+
+$$
+\mathbf{K}_i = \mathbf{W}_K \mathbf{X}_i
+$$
+
+$$
+\mathbf{V}_i = \mathbf{W}_ \mathbf{X}_i
+$$
+
+
+Once the query and key vectors are computed, they are used to calculate the attention scores. The attention weight \( w_{ij} \) between the \( i \)-th query and the \( j \)-th key is determined by the dot product of their vectors, followed by a division by the square root of the dimension of the key vectors and finally the application of a softmax function to normalize the weights:
+
+$$
+w'_{ij} = \mathbf{q}_i^\top \mathbf{k}_j
+$$
+
+This is the basic intuition behind self-attention. The dot product expresses how related two vectors of the input sequence are related and the output vectors are weighted sums over the whole input sequence (with the weights being determined by these dot products).
+
+$$
+w_{ij} = \text{softmax}(w'_{ij})
+$$
+
+Finally, the output vector \( \mathbf{z}_i \) is computed as a weighted sum of the value vectors \( \mathbf{v}_j \) multiplied by the softmax scores \( w_{ij} \):
+The idea if to keep intact the values of the words relevant and left-out the most irrelevant ones. 
+
+$$
+\mathbf{z}_i = \sum_j w_{ij} \mathbf{v}_j
+$$
+
+
+Everything is summarized in a comprehensible way below, for instance for the first word x1 : 
+
+![alt text](self_attention_example.png)
+
+
+In higher dimension and with matrix computation, we thus have as general formula to compute the outputs of the self-attention layer:
+
+![Self-attention computation in matrix form](matrix_self_attention.png)
+
+MULTI HEAD
+
+
+** (c) Positional Encoding** 
 
 
 
-**Feedforward NN**
+** (d) Feedforward NN**
 
 
 
-**Layer-normalization steps / Scaling**
+** (e) Layer-normalization steps / Scaling**
 
 
 
 
-*What happens in the decoder?* 
+#### *What happens in the Decoder?* 
 
 Same components as in the encoder
 
 "encoder-decoder" attention 
 
 Final Linear and Softmax Layer 
+
+#### Summary of a Transformers' model architecture
+
 
 
 Ref
