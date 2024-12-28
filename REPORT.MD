@@ -26,43 +26,39 @@ $$
 $$
 
 where
-```latex
-\mathbf{x} = \{x_1, x_2, \dots, x_n\}
-```
+$$
+\mathbf{X} = \{x_1, x_2, \dots, x_n\}
+$$
 is the input sequence, and
-```latex
-\mathbf{z} = \{z_1, z_2, \dots, z_n\}
-```
+$$
+\mathbf{Z} = \{z_1, z_2, \dots, z_n\}
+$$
 is the sequence of encoded representations.
 
 The decoder generates the output sequence
-```latex
+$$
 \mathbf{y} = \{y_1, y_2, \dots, y_m\}
-```
+$$
 autoregressively:
 
-```latex
+$$
 \mathbf{y}_t = \text{Decoder}(\mathbf{y}_{<t}, \mathbf{z}),
-```
+$$
 
 where
-```latex
+$$
 \mathbf{y}_{<t}
-```
+$$
 represents all tokens generated prior to
-```latex
+$$
 t
-```
+$$
 and
-```latex
-\mathbf{z}
-```
+$$
+\mathbf{Z}
+$$
 provides context from the encoder.
 
-
-
-
-Mettre graphique général 
 
 *What happens in the Encoder?*
 
