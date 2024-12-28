@@ -291,6 +291,11 @@ It also helps produce higher-quality outputs by generating responses that are mo
 However, RLHF comes with some challenges. One major issue is scalability. Using human feedback can be time-consuming and very costly, which can make it difficult to apply on a large scale. Indeed, RLHF can be demanding in terms of resources, as it needs computational power for training the reward model, collecting human feedback, and fine-tuning the language model.
 ALso, bias is another concern since human feedback can be influenced by subjective opinions and affect the fairness of the results.
 
+References for this part 
+
+TO COMPLETE 
+
+
 ### 2.2. Training a Reward Model and Optimization with Proximal Policy Optimization (PPO): implementation in practice 
 
 *Overview*
@@ -298,76 +303,65 @@ Following the same approach as Christiano et al. (2020), we began by selecting a
 Next, we trained a reward model (RM) to predict which summary is preferred by humans ("chosen" vs "rejected" and their associated scores). To do so, we used a pretrained **GPT-2 model**. 
 Finally, we employed reinforcement learning (RL) to train a policy (Proximal Policy Optimization, PPO) to maximize the score provided by the reward model as well as generating sample outputs from this optimized model to test its capabilities. 
 
-(a) Preprocessing of the dataset : Tokenization
+**(a) Preprocessing of the dataset : Tokenization**
 
-Documentation and analysis of the training process 
-https://huggingface.co/docs/trl/dataset_formats#preference -> choice of the dataset
+In this part, the task is to preprocess our dataset with the goal of training a reward model using the RewardTrainer from Hugging Face's transformers and trl libraries. 
+The goal is thus to prepare the dataset in a format compatible with the requirements of the reward model, particularly by tokenizing the "chosen" and "rejected" texts.
 
-RewardTrainer : Preference (implicit prompt recommended)
+Indeed, the the Hugging Face documentation on dataset formats informed us that the RewardTrainer requires a implicit prompt preference dataset. It means that the dataset should only contain the columns "chosen" and "rejected" (and not "prompt") and that a pretokenized dataset should contain the columns "input_ids_chosen", "attention_mask_chosen", "input_ids_rejected" and "attention_mask_rejected". 
 
-The [RewardTrainer] requires a implicit prompt preference dataset. It means that the dataset should only contain the columns "chosen" and "rejected" (and not "prompt"). The [RewardTrainer] supports both conversational and standard dataset format. When provided with a conversational dataset, the trainer will automatically apply the chat template to the dataset.
+Thus,  we decided to tokenize the dataset with the function *tokenize* that processed each pair of texts, transforming them into a format that the reward model can use. Specifically, the function uses a tokenizer to convert both the "chosen" and "rejected" texts into token IDs and attention masks. 
+This preprocessing ensures that the texts are properly formatted for training.
 
-You can also use a pretokenized dataset, in which case the dataset should contain the following columns: input_ids_chosen, attention_mask_chosen, input_ids_rejected and attention_mask_rejected.v
 
-After preparing your dataset, you can use the [RewardTrainer] in the same way as the Trainer class from 🤗 Transformers. You should pass an AutoModelForSequenceClassification model to the [RewardTrainer], along with a [RewardConfig] which configures the hyperparameters of the training.
+Additionally, as part of preprocessing, we selected a subset of the training dataset for the Reward Model (RM) training to optimize memory usage and computational efficiency. 
 
-https://github.com/huggingface/trl/tree/main
-
-et taking a SUBSET
 
 **(b) Configuration of the training parameters of the Reward Model**
 
-training_args = RewardConfig(
-    output_dir="/content/drive/MyDrive/reward_output",
-    per_device_train_batch_size=8,               # Batch size
-    num_train_epochs=1,                          # Number of training epochs
-    learning_rate=1.0e-5,                        # Learning rate for training
-    logging_steps=25,                            # Interval (in steps) to log training progress
-    evaluation_strategy="steps",                 # Evaluates the model at regular steps
-    eval_steps=50,
-    report_to = "none",                          # Disabling reports to external systems
-    dataset_num_proc=4                           # For parallel computing
-)
-
-MEMORY AND TIME-COMPUTATION EFFICIENCY PURPOSES 
+The training parameters for the Reward Model were chosen to balance efficiency and performance. 
+We chose a batch size of 8 to optimize memory usage while processing multiple examples. 
+The training was set for 1 epoch to minimize computational load, with a small learning rate of 1.0e-5 to ensure stable learning. 
+Frequent progress updates were enabled with logging_steps set to 25, and evaluation occurs every 50 steps (eval_steps=50) to monitor performance without slowing training. 
+Finally, parallel data processing was implemented (dataset_num_proc=4) to speed up training.
 
 **(c) Training and results / assessment**
 
-In our dataset, the columns "chosen_text" and "rejected_text" represent the two different summary options that have been compared and evaluated based on human preferences. The "logits" column we obtained after training the model shows the prediction probabilities or logits (e.g., [0.4218, 0.5782]) indicating which summary is preferred by the humans. 
+In our results, the columns "chosen_text" and "rejected_text" represent the two different summary options that have been compared and evaluated based on human preferences. The "logits" column we obtained after training the model shows the prediction probabilities or logits (e.g., [0.4218, 0.5782]) indicating which summary is preferred by the humans. 
 Thus, the "chosen_text" and "rejected_text" are used as pairs of summaries with associated human feedback, and the logits represent the model's predicted preference score. 
 
+The training results indicate that the Reward Model is making progress, but there's room for improvement, particularly in terms of accuracy. The results from step 50 show a training loss of 0.82, validation loss of 0.69, and an accuracy of 0.51, suggesting that the model is still in the early stages of learning and is not yet effectively differentiating between the "chosen" and "rejected" texts.
+
+Looking at the subset of our dataset, it consists of 1,242 training points and 1,000 testing points, which is a relatively small amount for training a robust reward model. The model’s performance could likely improve with a larger dataset, by including more diverse examples of "chosen" and "rejected" text pairs. The limited dataset might be causing the model to struggle in distinguishing differences between texts, as proved by the low accuracy and high loss. 
+If computational resources (e.g., CUDA memory) were not a constraint, adding more examples could help the model perform better. Also, we only consider here 1 training epoch, which might be not sufficient. 
 
 
-**(b) Optimization with Proximal Policy Optimization (PPO)**
+**(b) Optimization with Proximal Policy Optimization (PPO) or Fine Tuning with RL**
 
-Finally, we want to use the reward model developed before to train a policy that generates higher-quality outputs as evaluated by humans. This is primarily achieved through reinforcement learning, where the reward model's output serves as the reward signal for the entire generated summary. The policy is then optimized to maximize this reward using the PPO algorithm.
+Finally, we wanted to use the reward model to train a policy that generates higher-quality outputs, as evaluated by humans. This is done using reinforcement learning, where the reward model's output serves as the feedback signal for the generated summary. The goal is to optimize the policy to maximize this reward using the PPO algorithm.
 
-The PPO algorithm briefly consists in....
+PPO is effective because it refines the language model over time based on feedback from the reward model, which acts as the environment. The reward model evaluates the model’s outputs and assigns a score that reflects their quality. This feedback helps guide the policy to generate better outputs with each iteration.
+
+We started with an initial language model that generates basic responses. Using Reinforcement Learning from Human Feedback (RLHF), we fine-tuned the model to align its outputs with human preferences. PPO played a key role by maximizing the reward while also ensuring stability. PPO achieves this by applying a penalty that limits how much the policy can change, using KL divergence to control the updates and prevent drastic changes.
+
+All in all, we followed the approach explained in the RLHF lecture from Stanford as follows : 
+
+![alt text](PPO_Stanford.png)
+
+In addition, during training, we wanted to measure two metrics, as adviced in Hugging Face documentation "PPO FAQ Training", the **Mean Reward** and **KL Divergence**. 
+The Mean Reward would have helped tracking the average reward received by the model, with the aim of increasing it to improve the quality of generated outputs. 
+KL Divergence would have measured the difference between the current and reference policies, ensuring that the model's output stays close to the behavior of the reference model.
+
+However, due to CUDA memory limitations and lack of GPU resources, we could not fully compute and track these metrics during training.
+
+In future work, scaling up our computational resources would hence be essential to enable more effective optimization of the policy with PPO.
 
 
-Dataset Collection 
-
-Reward Model architecture 
-
-Training process (loss functions used, evaluation metrics...)
-
-Importance of robust evaluation 
-
-Common pitfalls like overfitting to the reward model 
-
-conclusion : can be improved / optimized : link to PPO
+References for this part : 
+https://huggingface.co/docs/trl/dataset_formats#preference
+https://huggingface.co/docs/trl/how_to_train
+OpenAI's RLHF Papers for ChatGPT: https://arxiv.org/abs/2203.02155 and First RLHF Paper: 
+RLHF lecture at Stanford
 
 
-## 3. 
-
-What is PPO (quickly)?
-
-Generation of the sample output from the optimized model to demonstrate its capabilities
-
-PPO FAQ Training :
-
-Mean Reward: The primary goal is to maximize the reward achieved by the model during RL training. Objective KL Divergence: KL divergence 
-(Kullback-Leibler divergence) measures the dissimilarity between two probability distributions. In the context of RL training, we use it 
-to quantify the difference between the current model and a reference model. Ideally, we want to keep the KL divergence between 0 and 10 to 
-ensure the model’s generated text remains close to what the reference model produces.
 
