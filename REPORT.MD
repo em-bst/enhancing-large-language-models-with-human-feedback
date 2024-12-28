@@ -15,19 +15,15 @@ Transformer models have marked a turning point in machine learning, particularly
 
 (a) Encoder-Decoder Structure
 
-# Understanding Transformer Architecture
-
-## Encoder-Decoder Structure
-
 The Transformer model consists of two main components: the encoder and the decoder, each constructed by stacking layers. The encoder processes the input sequence X (where each x_i is a vector representingg a word or token in the sequence) transforming it into a series of contextualized vector representations Z. These representations are then passed to the decoder, which generates the output sequence one token at a time. The two modules are connected via the attention mechanism, allowing the decoder to focus on relevant parts of the encoded input during generation.
 
 ![Encoder - Decoder Structure](enco-deco.png)
 
 Mathematically, the encoder-decoder structure can be expressed as:
 
-```latex
+$$
 \mathbf{z} = \text{Encoder}(\mathbf{x}),
-```
+$$
 
 where
 ```latex
