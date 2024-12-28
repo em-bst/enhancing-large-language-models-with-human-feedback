@@ -47,9 +47,9 @@ $$
 
 autoregressively:
 
-\[
+$$
 \mathbf{y}_t = \text{Decoder}(\mathbf{y}_{<t}, \mathbf{z}),
-\]
+$$
 
 where
 
@@ -61,21 +61,26 @@ represents all tokens generated prior to t.
 
 *What happens in the Encoder?*
 
-Image zoom encoder 
+The encoder consists of N identical layers, each comprising three main components: a self-attention mechanism, a feed-forward neural network (FFN), and layer normalization with residual connections. Together, these components process the input sequence to produce a set of contextualized representations as follows : 
 
-Self attention and multihead-attention
+![Sub_layers of one encoder](encoder_general.png)
 
-
-
-Positional Encoding 
+Let us now go into more details and investigate what happens in each one of the layers.
 
 
+**Self attention and multihead-attention**
 
-Feedforward NN
+embedding / preprocessing
+
+**Positional Encoding** 
 
 
 
-Layer-normalization steps / Scaling
+**Feedforward NN**
+
+
+
+**Layer-normalization steps / Scaling**
 
 
 
