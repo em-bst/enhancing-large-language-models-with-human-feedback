@@ -202,10 +202,7 @@ Bloem, Peter. 2019. “Transformers from Scratch.” Blog post https://peterbloe
 Causal transformers are a specialized class of transformer architectures designed for autoregressive tasks, where the prediction of each token depends only on its preceding context. Unlike bidirectional models, which take the entire input sequence for contextual representation, causal transformers adopt a unidirectional approach, ensuring that future tokens do not influence current predictions.
 This characteristic makes causal transformers particularly effective for generative tasks such as text generation or conversational modeling.
 Their architecture typically employs causal masking in the self-attention mechanism.
-An example of Causal Transformer is the Generative Pre-trained Transformer (GPT).
-
-Let us now define all these notions : 
-
+An example of Causal Transformer is the Generative Pre-trained Transformer (GPT). In the followingg parts, we are going to focus on its architecture and training methodology as well as implementing it.
 
 **(a) Causal Masking**
 
@@ -224,14 +221,35 @@ In the context of GPT-like LLMs, future tokens are thus masked out for each toke
 So, by implementing causal self-attention, we ensure the generation of text by our language model from left-to-right, by taking into account only the previous context of a sentence to predict new words, which is really important to get sentences that have a sense.
 
 
+**(b) GPT Architecture and Training Methodology**
 
-**(b) Training Objective**
+*GPT Architecture*
 
-Architectures : GPT and LLaMA -> focus on GPT
+The Generative Pre-trained Transformer (GPT) is a decoder-only transformer architecture designed for autoregressive tasks. Its structure, based on the transformer framework, is made to generate text by predicting the next token in a sequence based on prior context. Here is its key structure:
 
-Challenges and solutions 
+1) Stacked Transformer Decoder Layers
 
-Optimization Techniques 
+- Multi-Head Self-Attention with Causal Masking Layers 
+
+- Feedforward Neural Networks (FFNN) Layers.
+
+- Residual Connections and Layer Normalization
+
+2) Positional Embeddings based on Transformer structure.
+
+
+3) Output Layer
+The output of GPT is passed through a linear transformation followed by a softmax layer, producing probabilities over the vocabulary for the next token prediction, like in the general Transformer structure.
+
+*GPT Training Methodology*
+
+GPT’s training methodology revolves around self-supervised learning. 
+Self-supervised learning eliminates the need for manually labeled datasets by using the structure of the input data itself as the supervision signal.
+
+The training objective for causal transformers is based on minimizing the negative log-likelihood (NLL) of the target sequence given the preceding context.
+More precisely, GPT is trained to predict the next token in a sequence, maximizing the conditional probability.
+
+After training, GPT can be fine-tuned for specific tasks and to make it scalable and cost-effective. Indeed, we will see later on in the implementation that cost-efficiency will be indeed most crucial.
 
 
 ## 2. Reinforcement Learning with Human Feedback 
