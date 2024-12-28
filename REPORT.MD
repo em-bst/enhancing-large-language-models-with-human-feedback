@@ -1,16 +1,102 @@
+# Enhancing Large Language Models with Human Feedback via Reinforcement Learning : Report 
+
+*Emma Bastien*
+
+## Introduction
+
+
+
 ## 1. Understanding and Utilizing Transformers 
+
+Transformer models have marked a turning point in machine learning, particularly in natural language processing (NLP). Introduced in Vaswani et al.’s seminal paper *Attention is All You Need​*
+, Transformers diverge from traditional neural architectures by relying on self-attention mechanisms. This innovation eliminates the need for recurrent or convolutional networks, addressing their inefficiencies and unlocking a range of possibilities in sequence modeling.
 
 ### 1.1. Transformer models : Mathematical foundation and Architecture
 
-Self attention
+(a) Encoder-Decoder Structure
+
+# Understanding Transformer Architecture
+
+## Encoder-Decoder Structure
+
+The Transformer model consists of two main components: the encoder and the decoder, each constructed by stacking layers. The encoder processes the input sequence X (where each x_i is a vector representingg a word or token in the sequence) transforming it into a series of contextualized vector representations Z. These representations are then passed to the decoder, which generates the output sequence one token at a time. The two modules are connected via the attention mechanism, allowing the decoder to focus on relevant parts of the encoded input during generation.
+
+![Encoder - Decoder Structure](enco-deco.png)
+
+Mathematically, the encoder-decoder structure can be expressed as:
+
+```latex
+\mathbf{z} = \text{Encoder}(\mathbf{x}),
+```
+
+where
+```latex
+\mathbf{x} = \{x_1, x_2, \dots, x_n\}
+```
+is the input sequence, and
+```latex
+\mathbf{z} = \{z_1, z_2, \dots, z_n\}
+```
+is the sequence of encoded representations.
+
+The decoder generates the output sequence
+```latex
+\mathbf{y} = \{y_1, y_2, \dots, y_m\}
+```
+autoregressively:
+
+```latex
+\mathbf{y}_t = \text{Decoder}(\mathbf{y}_{<t}, \mathbf{z}),
+```
+
+where
+```latex
+\mathbf{y}_{<t}
+```
+represents all tokens generated prior to
+```latex
+t
+```
+and
+```latex
+\mathbf{z}
+```
+provides context from the encoder.
+
+
+
+
+Mettre graphique général 
+
+*What happens in the Encoder?*
+
+Image zoom encoder 
+
+Self attention and multihead-attention
+
+
 
 Positional Encoding 
 
+
+
 Feedforward NN
 
-Encoder-Decoder Structure
 
-Scalability
+
+Layer-normalization steps / Scaling
+
+
+
+
+*What happens in the decoder?* 
+
+Same components as in the encoder
+
+"encoder-decoder" attention 
+
+Final Linear and Softmax Layer 
+
 
 Ref
 - attention is all you need
