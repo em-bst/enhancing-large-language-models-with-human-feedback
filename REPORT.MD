@@ -31,6 +31,10 @@ $$
 \mathbf{X} = \{x_1, x_2, \dots, x_n\}
 $$
 
+$$
+\mathbf{X} = [x_1, x_2, \dots, x_n]
+$$
+
 is the input sequence, and
 
 $$
