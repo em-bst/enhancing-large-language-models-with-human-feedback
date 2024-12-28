@@ -256,17 +256,49 @@ After training, GPT can be fine-tuned for specific tasks and to make it scalable
 
 ### 2.1. How does it works ? 
 
-Overview of RLHF
+*Overview of RLHF*
 
-Key steps
+Reinforcement Learning with Human Feedback (RLHF) is an approach that improves models by integrating human preferences into the training process. Unlike traditional reinforcement learning, which depends on explicit reward signals based on predefined rules, RLHF uses human feedback to align models with desired behaviors. This method helps ensure that the model's outputs are more relevant with human values.
 
-Applications 
+RLHF is especially valuable in NLP and large language models (LLMs). By incorporating human feedback, LLMs can better interpret complex instructions and generate more accurate content.
 
-Advantages and Challenges 
+**Key steps of RLHF**
 
-Specific context of LLMs
+1. Initial Model Training
 
-### 2.2. Training a Reward Model : implementation in practice 
+A large language model is pre-trained on a dataset using supervised learning techniques. This forms the base model, which has general knowledge and the ability to generate coherent text.
+
+2. Collection of Human Feedback:
+
+Human evaluators provide feedback on the model’s outputs. This feedback is used to create a **Reward Model**.
+
+3. Training of the Reward Model:
+
+The reward model is trained to predict human preferences based on the collected feedback. This model assigns a reward score to outputs, estimating how closely they align with human evaluations.
+
+4. Fine-tuning with Reinforcement Learning:
+
+Using Reinforcement Learning, the base model is fine-tuned to optimize for the reward model’s score. A common algorithm employed in this stage is Proximal Policy Optimization (PPO).
+
+These steps are illustrated below by the Early OpenAI experiments with RLHF : 
+
+![](reward_ppo_steps.png)
+
+**Advantages and Challenges** 
+RLHF offers several benefits, especially in the **context of LLMs**. First, it improves alignment with human intentions and ethical guidelines, ensuring that models behave in ways that reflect human values and also ethics.
+It also helps produce higher-quality outputs by generating responses that are more accurate and relevant to the task at hand. Additionally, RLHF is adaptable, allowing models to be customized for specific applications and user preferences. This makes it easier to fine-tune models to meet the needs of different user.
+
+However, RLHF comes with some challenges. One major issue is scalability. Using human feedback can be time-consuming and very costly, which can make it difficult to apply on a large scale. Indeed, RLHF can be demanding in terms of resources, as it needs computational power for training the reward model, collecting human feedback, and fine-tuning the language model.
+ALso, bias is another concern since human feedback can be influenced by subjective opinions and affect the fairness of the results.
+
+### 2.2. Training a Reward Model and Optimization with Proximal Policy Optimization (PPO): implementation in practice 
+
+*Overview*
+Following the same approach as Christiano et al. (2020), we began by selecting a dataset of human preferences for pairs of summaries, the *tiny-ultrafeedback-binarized dataset* from the trl library (Hugging Face). 
+Next, we trained a reward model (RM) to predict which summary is preferred by humans ("chosen" vs "rejected" and their associated scores). To do so, we used a pretrained **GPT-2 model**. 
+Finally, we employed reinforcement learning (RL) to train a policy (Proximal Policy Optimization, PPO) to maximize the score provided by the reward model as well as generating sample outputs from this optimized model to test its capabilities. 
+
+(a) Preprocessing of the dataset : Tokenization
 
 Documentation and analysis of the training process 
 https://huggingface.co/docs/trl/dataset_formats#preference -> choice of the dataset
@@ -281,6 +313,38 @@ After preparing your dataset, you can use the [RewardTrainer] in the same way as
 
 https://github.com/huggingface/trl/tree/main
 
+et taking a SUBSET
+
+**(b) Configuration of the training parameters of the Reward Model**
+
+training_args = RewardConfig(
+    output_dir="/content/drive/MyDrive/reward_output",
+    per_device_train_batch_size=8,               # Batch size
+    num_train_epochs=1,                          # Number of training epochs
+    learning_rate=1.0e-5,                        # Learning rate for training
+    logging_steps=25,                            # Interval (in steps) to log training progress
+    evaluation_strategy="steps",                 # Evaluates the model at regular steps
+    eval_steps=50,
+    report_to = "none",                          # Disabling reports to external systems
+    dataset_num_proc=4                           # For parallel computing
+)
+
+MEMORY AND TIME-COMPUTATION EFFICIENCY PURPOSES 
+
+**(c) Training and results / assessment**
+
+In our dataset, the columns "chosen_text" and "rejected_text" represent the two different summary options that have been compared and evaluated based on human preferences. The "logits" column we obtained after training the model shows the prediction probabilities or logits (e.g., [0.4218, 0.5782]) indicating which summary is preferred by the humans. 
+Thus, the "chosen_text" and "rejected_text" are used as pairs of summaries with associated human feedback, and the logits represent the model's predicted preference score. 
+
+
+
+**(b) Optimization with Proximal Policy Optimization (PPO)**
+
+Finally, we want to use the reward model developed before to train a policy that generates higher-quality outputs as evaluated by humans. This is primarily achieved through reinforcement learning, where the reward model's output serves as the reward signal for the entire generated summary. The policy is then optimized to maximize this reward using the PPO algorithm.
+
+The PPO algorithm briefly consists in....
+
+
 Dataset Collection 
 
 Reward Model architecture 
@@ -294,7 +358,7 @@ Common pitfalls like overfitting to the reward model
 conclusion : can be improved / optimized : link to PPO
 
 
-## 3. Optimization with Proximal Policy Optimization (PPO)
+## 3. 
 
 What is PPO (quickly)?
 
