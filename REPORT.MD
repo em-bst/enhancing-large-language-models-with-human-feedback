@@ -47,9 +47,9 @@ $$
 
 autoregressively:
 
-$$
+\[
 \mathbf{y}_t = \text{Decoder}(\mathbf{y}_{<t}, \mathbf{z}),
-$$
+\]
 
 where
 
