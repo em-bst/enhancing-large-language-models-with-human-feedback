@@ -14,9 +14,9 @@ Transformer models have marked a turning point in machine learning, particularly
 ### 1.1. Transformer models : Mathematical foundation and Architecture
 
 *NB:*
-All the illustrations in the following parts come from *Illustrated Transformer* written by Jay Alammar (2018)
+All the illustrations in the following parts come from *The Illustrated Transformer* written by Jay Alammar (2018).
 
-(a) Encoder-Decoder Structure
+**(a) Encoder-Decoder Structure**
 
 The Transformer model consists of two main components: the encoder and the decoder, each constructed by stacking layers. The encoder processes the input sequence X (where each x_i is a vector representingg a word or token in the sequence) transforming it into a series of contextualized vector representations Z. These representations are then passed to the decoder, which generates the output sequence one token at a time. The two modules are connected via the attention mechanism, allowing the decoder to focus on relevant parts of the encoded input during generation.
 
@@ -71,7 +71,7 @@ The encoder consists of N identical layers, each comprising three main component
 Let us now go into more details and investigate what happens in each one of the layers.
 
 
-** (b) Self attention and multihead-attention**
+**(b) Self attention and multihead-attention**
 
 The self-attention mechanism is the core operation of the encoder. It allows each token in the sequence to attend to every other token of the sequence, producing a weighted sum of the sequence's representations. 
 The operation is crucial since it is the only one in the architecture that allows to learn information between vectors (ie. words).
@@ -150,17 +150,26 @@ However, since the Feedforward layer, coming after the multi-head attention one,
 
 ![Multi-head attention structure](multi_head_attention.png)
 
-** (c) Positional Encoding** 
+**(c) Positional Encoding** 
+
+Additionnally, Transformers also take into account the order of the words in the imput sequence X. Indeed, depending on the order of the words, the sequences coudl have a very different meaning. It is thus important to add an additionnal element to account for this. 
+Do to so, the Transformers add an additionnal vector to each input embedded word x1, ... xn called position encodings. 
+Positional encoding allows to introduce sequential information in the inputs. 
 
 
+**(d) Layer Normalization and Residual Connections**
 
-** (d) Feedforward NN**
+Finally, before and after going into the Feed Forward NN layer, our inputs go through a "Layer Normalization and Residual Connection Step" ("Add and Normalize" layer).
+This consists in adding the input of each sub-layer to its output and apply normalization to ensure numerical stability and faster convergence : 
 
+$$
+\text{Output} = \text{LayerNorm}(x + \text{Sublayer}(x))
+$$
 
-
-** (e) Layer-normalization steps / Scaling**
-
-
+Where:
+- \( x \) is the input to the layer.
+- \( \text{Sublayer}(x) \) represents the operation performed within the sublayer (e.g., attention or feedforward network).
+- \( \text{LayerNorm} \) is the layer normalization applied to the sum of the input and sublayer output.
 
 
 #### *What happens in the Decoder?* 
@@ -172,6 +181,7 @@ Same components as in the encoder
 Final Linear and Softmax Layer 
 
 #### Summary of a Transformers' model architecture
+
 
 
 
