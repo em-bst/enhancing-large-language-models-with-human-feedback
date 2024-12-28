@@ -173,29 +173,59 @@ Where:
 
 
 #### *What happens in the Decoder?* 
+Now that we have investigated in details what were the differents layers and their purpose in the encoder, let us now focus on the events of the decoder. 
+Here is its structure : 
 
-Same components as in the encoder
+![Layers of the decoder](decoder_global.png)
 
-"encoder-decoder" attention 
+So, as showed above, globally the decoder mirrors the encoder's structure but includes additional components to enable the generation of the output sequence.
 
-Final Linear and Softmax Layer 
+Similarly to the encoder, the decoder employs self-attention. However, it includes a masking mechanism that prevents attending to future tokens (setting them to a value of -infinity). 
+Also, the first attention layer of the decoder is specific and called the "Encoder-Decoder" attention. It allows the decoder to decode the encoder's output representations by taking the Keys and Values matrix from the outputs of the encoder. 
 
-#### Summary of a Transformers' model architecture
+Finally, after going through several layers of multi-head attentions, FFNN and Layer Normalization, the decoder stacks outputs a final vector of floats that needs to be turned back into words. 
+This final step is implemented through a Linear Layer followed by a Softmax one. 
+
+The linear layer maps the representations to the dimensionality of the target vocabulary, which are called logits vectors. Finally, a softmax function converts these vectors into probabilities (all positive and adding to 1) for each word in the vocabulary, enabling the model to predict the most likely word at each step.
+Finally, the cell with the highest probability is chosen and its associated word is added to the final words output. 
 
 
+*References for this part:*
+Vaswani et al. 2017. “Attention Is All You Need.” Advances in Neural Information Processing Systems 30: 5998–6008. https://arxiv.org/abs/1706.03762.
 
+Alammar, Jay. 2018. “The Illustrated Transformer.” Blog post http://jalammar.github.io/illustrated-transformer/.
 
-Ref
-- attention is all you need
-- HF transformers doc + TP 
-- Jay Allammar's Visual Guide to Transformers 
-- Peter Bloem : transformers from scratch 
+Bloem, Peter. 2019. “Transformers from Scratch.” Blog post https://peterbloem.nl/blog/transformers.
 
 ### 1.2. Causal Transformers : Concept and Training Methodologies
 
-Causal Masking
+Causal transformers are a specialized class of transformer architectures designed for autoregressive tasks, where the prediction of each token depends only on its preceding context. Unlike bidirectional models, which take the entire input sequence for contextual representation, causal transformers adopt a unidirectional approach, ensuring that future tokens do not influence current predictions.
+This characteristic makes causal transformers particularly effective for generative tasks such as text generation or conversational modeling.
+Their architecture typically employs causal masking in the self-attention mechanism.
+An example of Causal Transformer is the Generative Pre-trained Transformer (GPT).
 
-Training Objective
+Let us now define all these notions : 
+
+
+**(a) Causal Masking**
+
+The main difference with the Transformer structure presented above relies in the first layer of attention in the decoder that is called "Causal Self-Attention" or "Masked Self-Attention" : 
+
+![Causal Transformer Structure](causal_self_attention.png)
+
+This causal mask ensures that during the prediction of a token at any position t, only information from preceding tokens t-1, t-2, ..., 1 is used
+This is achieved by applying a triangular masking matrix to the attention scores, effectively blocking any future information into the present prediction.
+It is also more efficient due to the fact that it saves time on doing unnecessary computations for the masked positions. 
+In the context of GPT-like LLMs, future tokens are thus masked out for each token of the input set as follows: 
+
+![Causal Mask illustration](mask.png)
+
+
+So, by implementing causal self-attention, we ensure the generation of text by our language model from left-to-right, by taking into account only the previous context of a sentence to predict new words, which is really important to get sentences that have a sense.
+
+
+
+**(b) Training Objective**
 
 Architectures : GPT and LLaMA -> focus on GPT
 
