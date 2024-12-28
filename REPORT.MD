@@ -1,9 +1,7 @@
 # Enhancing Large Language Models with Human Feedback via Reinforcement Learning : Report 
 
 *Emma Bastien*
-
-## Introduction
-
+## Introduction 
 
 
 ## 1. Understanding and Utilizing Transformers 
@@ -190,12 +188,12 @@ The linear layer maps the representations to the dimensionality of the target vo
 Finally, the cell with the highest probability is chosen and its associated word is added to the final words output. 
 
 
-*References for this part:*
-Vaswani et al. 2017. “Attention Is All You Need.” Advances in Neural Information Processing Systems 30: 5998–6008. https://arxiv.org/abs/1706.03762.
+##### References for this part:
+- Vaswani et al. 2017. “Attention Is All You Need.” Advances in Neural Information Processing Systems 30: 5998–6008. https://arxiv.org/abs/1706.03762.
 
-Alammar, Jay. 2018. “The Illustrated Transformer.” Blog post http://jalammar.github.io/illustrated-transformer/.
+- Alammar. 2018. “The Illustrated Transformer.” Blog post http://jalammar.github.io/illustrated-transformer/.
 
-Bloem, Peter. 2019. “Transformers from Scratch.” Blog post https://peterbloem.nl/blog/transformers.
+- Bloem. 2019. “Transformers from Scratch.” Blog post https://peterbloem.nl/blog/transformers.
 
 ### 1.2. Causal Transformers : Concept and Training Methodologies
 
@@ -251,6 +249,14 @@ More precisely, GPT is trained to predict the next token in a sequence, maximizi
 
 After training, GPT can be fine-tuned for specific tasks and to make it scalable and cost-effective. Indeed, we will see later on in the implementation that cost-efficiency will be indeed most crucial.
 
+##### References for this part:
+
+- Hugging Face. "Language Modeling." Transformers Documentation. Last modified December 28, 2024. https://huggingface.co/docs/transformers/en/tasks/language_modeling?utm_source=chatgpt.com.
+
+- Hugging Face. "Chapter 7, Section 6: Causal Language Modeling." Hugging Face NLP Course. Last modified December 28, 2024. https://huggingface.co/learn/nlp-course/en/chapter7/6?utm_source=chatgpt.com.
+
+- Kashyap, Tejaswi.2021. "Unpacking Attention in Transformers: From Self-Attention to Causal Self-Attention." Medium https://medium.com/@tejaswi_kashyap/unpacking-attention-in-transformers-from-self-attention-to-causal-self-attention-21fa6824acd8.
+
 
 ## 2. Reinforcement Learning with Human Feedback 
 
@@ -290,10 +296,6 @@ It also helps produce higher-quality outputs by generating responses that are mo
 
 However, RLHF comes with some challenges. One major issue is scalability. Using human feedback can be time-consuming and very costly, which can make it difficult to apply on a large scale. Indeed, RLHF can be demanding in terms of resources, as it needs computational power for training the reward model, collecting human feedback, and fine-tuning the language model.
 ALso, bias is another concern since human feedback can be influenced by subjective opinions and affect the fairness of the results.
-
-References for this part 
-
-TO COMPLETE 
 
 
 ### 2.2. Training a Reward Model and Optimization with Proximal Policy Optimization (PPO): implementation in practice 
@@ -357,11 +359,43 @@ However, due to CUDA memory limitations and lack of GPU resources, we could not 
 In future work, scaling up our computational resources would hence be essential to enable more effective optimization of the policy with PPO.
 
 
-References for this part : 
-https://huggingface.co/docs/trl/dataset_formats#preference
-https://huggingface.co/docs/trl/how_to_train
-OpenAI's RLHF Papers for ChatGPT: https://arxiv.org/abs/2203.02155 and First RLHF Paper: 
-RLHF lecture at Stanford
+##### References for this part (including for the implementation) : 
+
+- Christiano et al. 2020. "Deep Reinforcement Learning from Human Preferences." Proceedings of NeurIPS 
+https://proceedings.neurips.cc/paper_files/paper/2020/file/1f89885d556929e98d3ef9b86448f951-Paper.pdf.
+
+- CleanRL. "PPO Implementation in PyTorch." CleanRL GitHub.
+https://github.com/vwxyzjn/cleanrl/tree/master.
+
+- Hugging Face. "Reward Modeling Example." Hugging Face GitHub. 
+https://github.com/huggingface/trl/blob/main/examples/scripts/reward_modeling.py.
+
+- Hugging Face. "TRL GitHub Repository." Hugging Face GitHub.
+ https://github.com/huggingface/trl/tree/main.
+
+- Hugging Face. "TRL Quickstart: Minimal Example." Hugging Face Documentation. 
+https://huggingface.co/docs/trl/quickstart#minimal-example.
+
+- Hugging Face. "TRL Dataset Formats: Preference." Hugging Face Documentation. 
+ https://huggingface.co/docs/trl/dataset_formats#preference.
+
+- Hugging Face. "How to Train Models Using TRL." Hugging Face Documentation. 
+ https://huggingface.co/docs/trl/how_to_train.
+
+- OpenAI. 2022. "Learning to Summarize with Human Feedback." arXiv. 
+https://arxiv.org/abs/2203.02155.
+
+- Schulman et al. 2017. "Proximal Policy Optimization Algorithms." arXiv. 
+https://arxiv.org/abs/1707.06347.
+
+- Stanford University. 2024. "RLHF Lecture."
+ https://t.co/Uk8g6mBTrD.
+
+
+
+
+
+
 
 
 
