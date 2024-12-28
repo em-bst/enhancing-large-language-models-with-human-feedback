@@ -13,6 +13,9 @@ Transformer models have marked a turning point in machine learning, particularly
 
 ### 1.1. Transformer models : Mathematical foundation and Architecture
 
+*NB:*
+All the illustrations in the following parts come from *Illustrated Transformer* written by Jay Alammar (2018)
+
 (a) Encoder-Decoder Structure
 
 The Transformer model consists of two main components: the encoder and the decoder, each constructed by stacking layers. The encoder processes the input sequence X (where each x_i is a vector representingg a word or token in the sequence) transforming it into a series of contextualized vector representations Z. These representations are then passed to the decoder, which generates the output sequence one token at a time. The two modules are connected via the attention mechanism, allowing the decoder to focus on relevant parts of the encoded input during generation.
@@ -73,7 +76,7 @@ Let us now go into more details and investigate what happens in each one of the 
 The self-attention mechanism is the core operation of the encoder. It allows each token in the sequence to attend to every other token of the sequence, producing a weighted sum of the sequence's representations. 
 The operation is crucial since it is the only one in the architecture that allows to learn information between vectors (ie. words).
 
-The input sequence X made of embedded / preprocessed vectors goes in and a sequence of vectors goes out. 
+The input sequence X made of embedded / preprocessed vectors goes in and a sequence of vectors Z goes out. 
 
 How is this sequence Z computed ? 
 
@@ -89,13 +92,16 @@ In the standard self-attention setup, each input vector is required to complete 
 To do so, first, from each input vector are created three vectors (Query, Key, Value). These vectors are computed by multiplying the embedded vectors by three matrices trained and defined as : 
 
 \( k \times k \) weight matrices: \( \mathbf{W}_Q \), \( \mathbf{W}_K \), and \( \mathbf{W}_V \)
+
 $$
 \mathbf{Q}_i = \mathbf{W}_Q \mathbf{X}_i
 $$
 
+
 $$
 \mathbf{K}_i = \mathbf{W}_K \mathbf{X}_i
 $$
+
 
 $$
 \mathbf{V}_i = \mathbf{W}_ \mathbf{X}_i
@@ -104,18 +110,23 @@ $$
 
 Once the query and key vectors are computed, they are used to calculate the attention scores. The attention weight \( w_{ij} \) between the \( i \)-th query and the \( j \)-th key is determined by the dot product of their vectors, followed by a division by the square root of the dimension of the key vectors and finally the application of a softmax function to normalize the weights:
 
+
 $$
 w'_{ij} = \mathbf{q}_i^\top \mathbf{k}_j
 $$
 
+
 This is the basic intuition behind self-attention. The dot product expresses how related two vectors of the input sequence are related and the output vectors are weighted sums over the whole input sequence (with the weights being determined by these dot products).
+
 
 $$
 w_{ij} = \text{softmax}(w'_{ij})
 $$
 
+
 Finally, the output vector \( \mathbf{z}_i \) is computed as a weighted sum of the value vectors \( \mathbf{v}_j \) multiplied by the softmax scores \( w_{ij} \):
 The idea if to keep intact the values of the words relevant and left-out the most irrelevant ones. 
+
 
 $$
 \mathbf{z}_i = \sum_j w_{ij} \mathbf{v}_j
@@ -131,8 +142,13 @@ In higher dimension and with matrix computation, we thus have as general formula
 
 ![Self-attention computation in matrix form](matrix_self_attention.png)
 
-MULTI HEAD
+Finally, in order to account for the model's ability to focus on different positions and that a word can have different meanings, Transformers models' actually use not a single-layer of self-attention as mentionned above but a **multi-head attention**. 
+It consists in several self-attention mechanisms that are applied in parallel. Each self-attention mechanism has its own key, value and query parameters. 
+More especially, according to Alammar (2018), a Transformer uses 8 attention heads (ie. we have 8 randomly initialized sets for each encoder and decoder). 
 
+However, since the Feedforward layer, coming after the multi-head attention one, does not expect 8 different inputs, a final step of the multi-head attention mechanism is to multiply the concatenated matrices bu a final weight matrix that was trained, as it was done in this illustration : 
+
+![Multi-head attention structure](multi_head_attention.png)
 
 ** (c) Positional Encoding** 
 
