@@ -114,7 +114,7 @@ The idea if to keep intact the values of the words relevant and left-out the mos
 
 
 $$ 
-{z}_i = \sum_j w_{ij} {v}_j 
+z_i = \sum_j w_{ij} v_j 
 $$
 
 
