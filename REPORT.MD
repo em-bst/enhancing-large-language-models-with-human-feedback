@@ -65,7 +65,7 @@ The input sequence X made of embedded / preprocessed vectors goes in and a seque
 
 How is this sequence Z computed ? 
 
-Well, each input vector \[ \mathbf{x}_i \] serves three distinct roles:
+Well, each input vector $\mathbf{x}_i$ serves three distinct roles:
 
 1. It is compared to all other vectors to determine the weights for its own output \[ \mathbf{z}_i \].
 2. It is compared to all other vectors to determine the weights for the output of another vector \[ \mathbf{z}_j \].
