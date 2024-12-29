@@ -67,8 +67,8 @@ How is this sequence Z computed ?
 
 Well, each input vector $\mathbf{x}_i$ serves three distinct roles:
 
-1. It is compared to all other vectors to determine the weights for its own output \[ \mathbf{z}_i \].
-2. It is compared to all other vectors to determine the weights for the output of another vector \[ \mathbf{z}_j \].
+1. It is compared to all other vectors to determine the weights for its own output $\mathbf{z}_i$.
+2. It is compared to all other vectors to determine the weights for the output of another vector $\mathbf{z}_j$.
 3. It contributes to the weighted sum that calculates each output vector after the weights have been established.
 
 These three roles are referred to as the **query**, the **key**, and the **value**. 
@@ -76,7 +76,7 @@ In the standard self-attention setup, each input vector is required to complete 
 
 To do so, first, from each input vector are created three vectors (Query, Key, Value). These vectors are computed by multiplying the embedded vectors by three matrices trained and defined as : 
 
-Weight matrices: \[ \mathbf{W}_Q \], \[ \mathbf{W}_K \], and \[ \mathbf{W}_V \]
+Weight matrices: $\mathbf{W}_Q$, $\mathbf{W}_K$, and $\mathbf{W}_V$
 
 $$
 \mathbf{Q}_i = \mathbf{W}_Q \mathbf{X}_i
@@ -109,12 +109,12 @@ w_{ij} = \text{softmax}(w'_{ij})
 $$
 
 
-Finally, the output vector \[ \mathbf{z}_i \] is computed as a weighted sum of the value vectors \[ \mathbf{v}_j \] multiplied by the softmax scores \[ \mathbf{w}_{ij} \]:
+Finally, the output vector $\mathbf{z}_i$ is computed as a weighted sum of the value vectors $\mathbf{v}_j$ multiplied by the softmax scores $\mathbf{w}_{ij}$:
 The idea if to keep intact the values of the words relevant and left-out the most irrelevant ones. 
 
 
 $$ 
-\mathbf{z}_i = \sum_j w_{ij} \mathbf{v}_j 
+{z}_i = \sum_j w_{ij} {v}_j 
 $$
 
 
