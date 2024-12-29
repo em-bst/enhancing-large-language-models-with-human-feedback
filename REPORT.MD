@@ -51,7 +51,7 @@ $$
 
 The encoder consists of layers, each comprising three main components: a self-attention mechanism, a feed-forward neural network (FFN), and layer normalization with residual connections. Together, these components process the input sequence to produce a set of contextualized representations as follows : 
 
-![Sub-layers of one encoder](encoder_general.png)
+![Sub-layers of one encoder](assets/encoder_general.png)
 
 Let us now go into more details and investigate what happens in each one of the layers.
 
@@ -120,12 +120,12 @@ $$
 
 Everything is summarized in a comprehensible way below, for instance for the first word x1 : 
 
-![alt text](self_attention_example.png)
+![alt text](assets/self_attention_example.png)
 
 
 In higher dimension and with matrix computation, we thus have as general formula to compute the outputs of the self-attention layer:
 
-![Self-attention computation in matrix form](matrix_self_attention.png)
+![Self-attention computation in matrix form](assets/matrix_self_attention.png)
 
 Finally, in order to account for the model's ability to focus on different positions and that a word can have different meanings, Transformers models' actually use not a single-layer of self-attention as mentionned above but a **multi-head attention**. 
 It consists in several self-attention mechanisms that are applied in parallel. Each self-attention mechanism has its own key, value and query parameters. 
@@ -133,7 +133,7 @@ More especially, according to Alammar (2018), a Transformer uses 8 attention hea
 
 However, since the Feedforward layer, coming after the multi-head attention one, does not expect 8 different inputs, a final step of the multi-head attention mechanism is to multiply the concatenated matrices by a final weight matrix that was trained, as it was done in this illustration : 
 
-![Multi-head attention structure](multi_head_attention.png)
+![Multi-head attention structure](assets/multi_head_attention.png)
 
 **(c) Positional Encoding** 
 
@@ -161,7 +161,7 @@ Where:
 Now that we have investigated in details what were the differents layers and their purpose in the encoder, let us now focus on the events of the decoder. 
 Here is its structure : 
 
-![Layers of the decoder](decoder_global.png)
+![Layers of the decoder](assets/decoder_global.png)
 
 So, as showed above, globally the decoder mirrors the encoder's structure but includes additional components to enable the generation of the output sequence.
 
@@ -193,14 +193,14 @@ An example of Causal Transformer is the Generative Pre-trained Transformer (GPT)
 
 The main difference with the Transformer structure presented above relies in the first layer of attention in the decoder that is called "Causal Self-Attention" or "Masked Self-Attention" : 
 
-![Causal Transformer Structure](causal_self_attention.png)
+![Causal Transformer Structure](assets/causal_self_attention.png)
 
 This causal mask ensures that during the prediction of a token at any position t, only information from preceding tokens t-1, t-2, ..., 1 is used
 This is achieved by applying a triangular masking matrix to the attention scores, effectively blocking any future information into the present prediction.
 It is also more efficient due to the fact that it saves time on doing unnecessary computations for the masked positions. 
 In the context of GPT-like LLMs, future tokens are thus masked out for each token of the input set as follows: 
 
-![Causal Mask illustration](mask.png)
+![Causal Mask illustration](assets/mask.png)
 
 
 So, by implementing causal self-attention, we ensure the generation of text by our language model from left-to-right, by taking into account only the previous context of a sentence to predict new words, which is really important to get sentences that have a sense.
@@ -275,7 +275,7 @@ Using Reinforcement Learning, the base model is fine-tuned to optimize for the r
 
 These steps are illustrated below by the Early OpenAI experiments with RLHF : 
 
-![](reward_ppo_steps.png)
+![](assets/reward_ppo_steps.png)
 
 **Advantages and Challenges** \\
 RLHF offers several benefits, especially in the **context of LLMs**. First, it improves alignment with human intentions and ethical guidelines, ensuring that models behave in ways that reflect human values and also ethics.
@@ -335,7 +335,7 @@ We started with an initial language model that generates basic responses. Using 
 
 All in all, we followed the approach explained in the RLHF lecture from Stanford as follows : 
 
-![alt text](PPO_Stanford.png)
+![alt text](assets/PPO_Stanford.png)
 
 In addition, during training, we wanted to measure two metrics, as adviced in Hugging Face documentation "PPO FAQ Training", the **Mean Reward** and **KL Divergence**. 
 The Mean Reward would have helped tracking the average reward received by the model, with the aim of increasing it to improve the quality of generated outputs. 
