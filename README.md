@@ -76,6 +76,53 @@ print("Generated Response:", response_txt)
 **Generated Response:** This morning I went to the  mile-long Air Base Towers where there are the buildings slightly above ground level and a trailer base
 
 
+### References and Resources
+
+**Transformers:**
+- Alammar. 2018. “The Illustrated Transformer.” Blog post http://jalammar.github.io/illustrated-transformer/.
+
+- Bloem. 2019. “Transformers from Scratch.” Blog post https://peterbloem.nl/blog/transformers.v
+
+- Vaswani et al. 2017. “Attention Is All You Need.” Advances in Neural Information Processing Systems 30: 5998–6008. https://arxiv.org/abs/1706.03762.
+
+**Causal Transformers:**
+- Hugging Face. "Language Modeling." Transformers Documentation. Last modified December 28, 2024. https://huggingface.co/docs/transformers/en/tasks/language_modeling?utm_source=chatgpt.com.
+
+- Hugging Face. "Chapter 7, Section 6: Causal Language Modeling." Hugging Face NLP Course. Last modified December 28, 2024. https://huggingface.co/learn/nlp-course/en/chapter7/6?utm_source=chatgpt.com.
+
+- Kashyap, Tejaswi.2021. "Unpacking Attention in Transformers: From Self-Attention to Causal Self-Attention." Medium https://medium.com/@tejaswi_kashyap/unpacking-attention-in-transformers-from-self-attention-to-causal-self-attention-21fa6824acd8.
+
+**RHLF and PPO Theory & Implementation**
+
+- Christiano et al. 2020. "Deep Reinforcement Learning from Human Preferences." Proceedings of NeurIPS 
+https://proceedings.neurips.cc/paper_files/paper/2020/file/1f89885d556929e98d3ef9b86448f951-Paper.pdf.
+
+- CleanRL. "PPO Implementation in PyTorch." CleanRL GitHub.
+https://github.com/vwxyzjn/cleanrl/tree/master.
+
+- Hugging Face. "Reward Modeling Example." Hugging Face GitHub. 
+https://github.com/huggingface/trl/blob/main/examples/scripts/reward_modeling.py.
+
+- Hugging Face. "TRL GitHub Repository." Hugging Face GitHub.
+ https://github.com/huggingface/trl/tree/main.
+
+- Hugging Face. "TRL Quickstart: Minimal Example." Hugging Face Documentation. 
+https://huggingface.co/docs/trl/quickstart#minimal-example.
+
+- Hugging Face. "TRL Dataset Formats: Preference." Hugging Face Documentation. 
+ https://huggingface.co/docs/trl/dataset_formats#preference.
+
+- Hugging Face. "How to Train Models Using TRL." Hugging Face Documentation. 
+ https://huggingface.co/docs/trl/how_to_train.
+
+- OpenAI. 2022. "Learning to Summarize with Human Feedback." arXiv. 
+https://arxiv.org/abs/2203.02155.
+
+- Schulman et al. 2017. "Proximal Policy Optimization Algorithms." arXiv. 
+https://arxiv.org/abs/1707.06347.
+
+- Stanford University. 2024. "RLHF Lecture."
+ https://t.co/Uk8g6mBTrD.
 
 
 
