@@ -12,11 +12,11 @@ Transformer models have marked a turning point in machine learning, particularly
 ### 1.1. Transformer models : Mathematical foundation and Architecture
 
 *NB:*
-All the illustrations in the following parts come from *The Illustrated Transformer* written by Jay Alammar (2018).
+All the illustrations in the following part come from *The Illustrated Transformer* written by Jay Alammar (2018).
 
 **(a) Encoder-Decoder Structure**
 
-The Transformer model consists of two main components: the encoder and the decoder, each constructed by stacking layers. The encoder processes the input sequence X (where each x_i is a vector representingg a word or token in the sequence) transforming it into a series of contextualized vector representations Z. These representations are then passed to the decoder, which generates the output sequence one token at a time. The two modules are connected via the attention mechanism, allowing the decoder to focus on relevant parts of the encoded input during generation.
+The Transformer model consists of two main components: the encoder and the decoder, each constructed by stacking layers. The encoder processes the input sequence X (where each x_i is a vector representing a word or token in the sequence) transforming it into a series of contextualized vector representations Z. These representations are then passed to the decoder, which generates the output sequence one token at a time. The two modules are connected via the attention mechanism, allowing the decoder to focus on relevant parts of the encoded input during generation.
 
 ![Encoder - Decoder Structure](enco-deco.png)
 
@@ -46,23 +46,10 @@ $$
 \mathbf{y} = [y_1, y_2, \dots, y_m]
 $$
 
-autoregressively:
-
-$$
-\mathbf{y}_t = \text{Decoder}(\mathbf{y}_{<t}, \mathbf{z}),
-$$
-
-where
-
-$$
-\mathbf{y}_{<t}
-$$
-
-represents all tokens generated prior to t. 
 
 #### *What happens in the Encoder?*
 
-The encoder consists of N identical layers, each comprising three main components: a self-attention mechanism, a feed-forward neural network (FFN), and layer normalization with residual connections. Together, these components process the input sequence to produce a set of contextualized representations as follows : 
+The encoder consists of layers, each comprising three main components: a self-attention mechanism, a feed-forward neural network (FFN), and layer normalization with residual connections. Together, these components process the input sequence to produce a set of contextualized representations as follows : 
 
 ![Sub-layers of one encoder](encoder_general.png)
 
@@ -78,10 +65,10 @@ The input sequence X made of embedded / preprocessed vectors goes in and a seque
 
 How is this sequence Z computed ? 
 
-Well, each input vector \( \mathbf{x}_i \) serves three distinct roles:
+Well, each input vector \[ \mathbf{x}_i \] serves three distinct roles:
 
-1. It is compared to all other vectors to determine the weights for its own output \( \mathbf{z}_i \).
-2. It is compared to all other vectors to determine the weights for the output of another vector \( \mathbf{z}_j \).
+1. It is compared to all other vectors to determine the weights for its own output \[ \mathbf{z}_i \].
+2. It is compared to all other vectors to determine the weights for the output of another vector \[ \mathbf{z}_j \].
 3. It contributes to the weighted sum that calculates each output vector after the weights have been established.
 
 These three roles are referred to as the **query**, the **key**, and the **value**. 
@@ -89,7 +76,7 @@ In the standard self-attention setup, each input vector is required to complete 
 
 To do so, first, from each input vector are created three vectors (Query, Key, Value). These vectors are computed by multiplying the embedded vectors by three matrices trained and defined as : 
 
-\( k \times k \) weight matrices: \( \mathbf{W}_Q \), \( \mathbf{W}_K \), and \( \mathbf{W}_V \)
+Weight matrices: \[ \mathbf{W}_Q \], \[ \mathbf{W}_K \], and \[ \mathbf{W}_V \]
 
 $$
 \mathbf{Q}_i = \mathbf{W}_Q \mathbf{X}_i
@@ -102,11 +89,11 @@ $$
 
 
 $$
-\mathbf{V}_i = \mathbf{W}_ \mathbf{X}_i
+\mathbf{V}_i = \mathbf{W}_V \mathbf{X}_i
 $$
 
 
-Once the query and key vectors are computed, they are used to calculate the attention scores. The attention weight \( w_{ij} \) between the \( i \)-th query and the \( j \)-th key is determined by the dot product of their vectors, followed by a division by the square root of the dimension of the key vectors and finally the application of a softmax function to normalize the weights:
+Once the query and key vectors are computed, they are used to calculate the attention scores. The attention weight w_ij between the \( i \)-th query and the \( j \)-th key is determined by the dot product of their vectors, followed by a division by the square root of the dimension of the key vectors and finally the application of a softmax function to normalize the weights:
 
 
 $$
@@ -122,12 +109,12 @@ w_{ij} = \text{softmax}(w'_{ij})
 $$
 
 
-Finally, the output vector \( \mathbf{z}_i \) is computed as a weighted sum of the value vectors \( \mathbf{v}_j \) multiplied by the softmax scores \( w_{ij} \):
+Finally, the output vector \[ \mathbf{z}_i \] is computed as a weighted sum of the value vectors \[ \mathbf{v}_j \] multiplied by the softmax scores \[ \mathbf{w}_{ij} \]:
 The idea if to keep intact the values of the words relevant and left-out the most irrelevant ones. 
 
 
-$$
-\mathbf{z}_i = \sum_j w_{ij} \mathbf{v}_j
+$$ 
+\mathbf{z}_i = \sum_j w_{ij} \mathbf{v}_j 
 $$
 
 
@@ -144,7 +131,7 @@ Finally, in order to account for the model's ability to focus on different posit
 It consists in several self-attention mechanisms that are applied in parallel. Each self-attention mechanism has its own key, value and query parameters. 
 More especially, according to Alammar (2018), a Transformer uses 8 attention heads (ie. we have 8 randomly initialized sets for each encoder and decoder). 
 
-However, since the Feedforward layer, coming after the multi-head attention one, does not expect 8 different inputs, a final step of the multi-head attention mechanism is to multiply the concatenated matrices bu a final weight matrix that was trained, as it was done in this illustration : 
+However, since the Feedforward layer, coming after the multi-head attention one, does not expect 8 different inputs, a final step of the multi-head attention mechanism is to multiply the concatenated matrices by a final weight matrix that was trained, as it was done in this illustration : 
 
 ![Multi-head attention structure](multi_head_attention.png)
 
@@ -165,9 +152,9 @@ $$
 $$
 
 Where:
-- \( x \) is the input to the layer.
-- \( \text{Sublayer}(x) \) represents the operation performed within the sublayer (e.g., attention or feedforward network).
-- \( \text{LayerNorm} \) is the layer normalization applied to the sum of the input and sublayer output.
+- x is the input to the layer.
+- Sublayer(x) represents the operation performed within the sublayer (e.g., attention or feedforward network).
+- LayerNorm is the layer normalization applied to the sum of the input and sublayer output.
 
 
 #### *What happens in the Decoder?* 
@@ -178,7 +165,7 @@ Here is its structure :
 
 So, as showed above, globally the decoder mirrors the encoder's structure but includes additional components to enable the generation of the output sequence.
 
-Similarly to the encoder, the decoder employs self-attention. However, it includes a masking mechanism that prevents attending to future tokens (setting them to a value of -infinity). 
+Similarly to the encoder, the decoder employs self-attention. It can also include a masking mechanism that prevents attending to future tokens (setting them to a value of -infinity). 
 Also, the first attention layer of the decoder is specific and called the "Encoder-Decoder" attention. It allows the decoder to decode the encoder's output representations by taking the Keys and Values matrix from the outputs of the encoder. 
 
 Finally, after going through several layers of multi-head attentions, FFNN and Layer Normalization, the decoder stacks outputs a final vector of floats that needs to be turned back into words. 
@@ -197,10 +184,10 @@ Finally, the cell with the highest probability is chosen and its associated word
 
 ### 1.2. Causal Transformers : Concept and Training Methodologies
 
-Causal transformers are a specialized class of transformer architectures designed for autoregressive tasks, where the prediction of each token depends only on its preceding context. Unlike bidirectional models, which take the entire input sequence for contextual representation, causal transformers adopt a unidirectional approach, ensuring that future tokens do not influence current predictions.
+Causal transformers are a specialized class of transformer architectures designed for autoregressive tasks, where the prediction of each token depends only on its previous context. Unlike bidirectional models, which take the entire input sequence for contextual representation, causal transformers adopt a unidirectional approach, ensuring that future tokens do not influence current predictions.
 This characteristic makes causal transformers particularly effective for generative tasks such as text generation or conversational modeling.
 Their architecture typically employs causal masking in the self-attention mechanism.
-An example of Causal Transformer is the Generative Pre-trained Transformer (GPT). In the followingg parts, we are going to focus on its architecture and training methodology as well as implementing it.
+An example of Causal Transformer is the Generative Pre-trained Transformer (GPT). In the following parts, we are going to focus on its architecture and training methodology as well as implementing it.
 
 **(a) Causal Masking**
 
@@ -223,20 +210,20 @@ So, by implementing causal self-attention, we ensure the generation of text by o
 
 *GPT Architecture*
 
-The Generative Pre-trained Transformer (GPT) is a decoder-only transformer architecture designed for autoregressive tasks. Its structure, based on the transformer framework, is made to generate text by predicting the next token in a sequence based on prior context. Here is its key structure:
+The Generative Pre-trained Transformer (GPT) is a decoder-only transformer architecture designed for autoregressive tasks. Its structure, based on the transformer one, is made to generate text by predicting the next token in a sequence based on prior context. Here is its key structure:
 
 1) Stacked Transformer Decoder Layers
 
-- Multi-Head Self-Attention with Causal Masking Layers 
+- Multi-Head Self-Attention with **Causal Masking Layers** 
 
-- Feedforward Neural Networks (FFNN) Layers.
+- Feedforward Neural Networks (FFNN) Layers
 
 - Residual Connections and Layer Normalization
 
-2) Positional Embeddings based on Transformer structure.
+2) Positional Embeddings based on Transformer structure
 
 
-3) Output Layer
+3) Output Layer:
 The output of GPT is passed through a linear transformation followed by a softmax layer, producing probabilities over the vocabulary for the next token prediction, like in the general Transformer structure.
 
 *GPT Training Methodology*
@@ -290,7 +277,7 @@ These steps are illustrated below by the Early OpenAI experiments with RLHF :
 
 ![](reward_ppo_steps.png)
 
-**Advantages and Challenges** 
+**Advantages and Challenges** \\
 RLHF offers several benefits, especially in the **context of LLMs**. First, it improves alignment with human intentions and ethical guidelines, ensuring that models behave in ways that reflect human values and also ethics.
 It also helps produce higher-quality outputs by generating responses that are more accurate and relevant to the task at hand. Additionally, RLHF is adaptable, allowing models to be customized for specific applications and user preferences. This makes it easier to fine-tune models to meet the needs of different user.
 
@@ -300,20 +287,20 @@ ALso, bias is another concern since human feedback can be influenced by subjecti
 
 ### 2.2. Training a Reward Model and Optimization with Proximal Policy Optimization (PPO): implementation in practice 
 
-*Overview*
+*Overview* \\
 Following the same approach as Christiano et al. (2020), we began by selecting a dataset of human preferences for pairs of summaries, the *tiny-ultrafeedback-binarized dataset* from the trl library (Hugging Face). 
 Next, we trained a reward model (RM) to predict which summary is preferred by humans ("chosen" vs "rejected" and their associated scores). To do so, we used a pretrained **GPT-2 model**. 
 Finally, we employed reinforcement learning (RL) to train a policy (Proximal Policy Optimization, PPO) to maximize the score provided by the reward model as well as generating sample outputs from this optimized model to test its capabilities. 
 
 **(a) Preprocessing of the dataset : Tokenization**
 
-In this part, the task is to preprocess our dataset with the goal of training a reward model using the RewardTrainer from Hugging Face's transformers and trl libraries. 
-The goal is thus to prepare the dataset in a format compatible with the requirements of the reward model, particularly by tokenizing the "chosen" and "rejected" texts.
+In this part, the task was to preprocess our dataset with the goal of training a reward model using the RewardTrainer from Hugging Face's transformers and trl libraries. 
+The goal was thus to prepare the dataset in a format compatible with the requirements of the reward model, particularly by tokenizing the "chosen" and "rejected" texts.
 
-Indeed, the the Hugging Face documentation on dataset formats informed us that the RewardTrainer requires a implicit prompt preference dataset. It means that the dataset should only contain the columns "chosen" and "rejected" (and not "prompt") and that a pretokenized dataset should contain the columns "input_ids_chosen", "attention_mask_chosen", "input_ids_rejected" and "attention_mask_rejected". 
+Indeed, the Hugging Face documentation on dataset formats informed us that the RewardTrainer requires an implicit prompt preference dataset. It means that the dataset should only contain the columns "chosen" and "rejected" (and not "prompt") and that a pretokenized dataset should contain the columns "input_ids_chosen", "attention_mask_chosen", "input_ids_rejected" and "attention_mask_rejected". 
 
 Thus,  we decided to tokenize the dataset with the function *tokenize* that processed each pair of texts, transforming them into a format that the reward model can use. Specifically, the function uses a tokenizer to convert both the "chosen" and "rejected" texts into token IDs and attention masks. 
-This preprocessing ensures that the texts are properly formatted for training.
+This preprocessing ensures that the texts were properly formatted for training.
 
 
 Additionally, as part of preprocessing, we selected a subset of the training dataset for the Reward Model (RM) training to optimize memory usage and computational efficiency. 
@@ -335,12 +322,12 @@ Thus, the "chosen_text" and "rejected_text" are used as pairs of summaries with 
 The training results indicate that the Reward Model is making progress, but there's room for improvement, particularly in terms of accuracy. The results from step 50 show a training loss of 0.82, validation loss of 0.69, and an accuracy of 0.51, suggesting that the model is still in the early stages of learning and is not yet effectively differentiating between the "chosen" and "rejected" texts.
 
 Looking at the subset of our dataset, it consists of 1,242 training points and 1,000 testing points, which is a relatively small amount for training a robust reward model. The model’s performance could likely improve with a larger dataset, by including more diverse examples of "chosen" and "rejected" text pairs. The limited dataset might be causing the model to struggle in distinguishing differences between texts, as proved by the low accuracy and high loss. 
-If computational resources (e.g., CUDA memory) were not a constraint, adding more examples could help the model perform better. Also, we only consider here 1 training epoch, which might be not sufficient. 
+If computational resources (e.g., CUDA memory) were not a constraint, adding more examples could help the model perform better. Also, we only consider here 1 training epoch, which might not be sufficient. 
 
 
 **(b) Optimization with Proximal Policy Optimization (PPO) or Fine Tuning with RL**
 
-Finally, we wanted to use the reward model to train a policy that generates higher-quality outputs, as evaluated by humans. This is done using reinforcement learning, where the reward model's output serves as the feedback signal for the generated summary. The goal is to optimize the policy to maximize this reward using the PPO algorithm.
+Finally, we wanted to use the reward model to train a policy that generates higher-quality outputs, as evaluated by humans. This is done using reinforcement learning, where the reward model's output serves as the feedback for the generated summary. The goal is to optimize the policy to maximize this reward using the PPO algorithm.
 
 PPO is effective because it refines the language model over time based on feedback from the reward model, which acts as the environment. The reward model evaluates the model’s outputs and assigns a score that reflects their quality. This feedback helps guide the policy to generate better outputs with each iteration.
 
